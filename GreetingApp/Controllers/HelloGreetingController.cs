@@ -19,6 +19,10 @@ namespace HelloGreetingApp.Controllers
             _greetingBL = greetingBL;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Get()
         {
