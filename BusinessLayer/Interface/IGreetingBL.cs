@@ -1,7 +1,9 @@
-﻿namespace BusinessLayer.Interface
+﻿using RepositoryLayer.Entity;
+
+namespace BusinessLayer.Interface
 {
     public interface IGreetingBL
     {
-        string GetGreeting();
+        GreetingEntity GetGreetingById(int id);
     }
 }

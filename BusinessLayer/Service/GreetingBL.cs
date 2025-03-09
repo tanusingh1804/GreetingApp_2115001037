@@ -1,12 +1,21 @@
 ﻿using BusinessLayer.Interface;
+using RepositoryLayer.Entity;
+using RepositoryLayer.Interface;
 
 namespace BusinessLayer.Service
 {
     public class GreetingBL : IGreetingBL
     {
-        public string GetGreeting()
+        private readonly IGreetingRL _greetingRL;
+
+        public GreetingBL(IGreetingRL greetingRL)
         {
-            return "Hello World";
+            _greetingRL = greetingRL;
+        }
+
+        public GreetingEntity GetGreetingById(int id)
+        {
+            return _greetingRL.GetGreetingById(id);
         }
     }
 }

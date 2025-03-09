@@ -1,37 +1,29 @@
+using BusinessLayer.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using BusinessLayer.Interface;
-using ModelLayer.Model;
-using BusinessLayer.Interface;
+using RepositoryLayer.Entity;
 
-namespace HelloGreetingApp.Controllers
+namespace GreetingApp.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
-    public class HelloGreetingAppController : ControllerBase
+    public class GreetingController : ControllerBase
     {
-        private readonly ILogger<HelloGreetingAppController> _logger;
         private readonly IGreetingBL _greetingBL;
 
-        public HelloGreetingAppController(ILogger<HelloGreetingAppController> logger, IGreetingBL greetingBL)
+        public GreetingController(IGreetingBL greetingBL)
         {
-            _logger = logger;
             _greetingBL = greetingBL;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("{id}")]
+        public IActionResult GetGreetingById(int id)
         {
-            _logger.LogInformation("GET method called.");
-            var greetingMessage = _greetingBL.GetGreeting(); // Calling Service Layer
-
-            var responseModel = new ResponseModel<string>
+            var greeting = _greetingBL.GetGreetingById(id);
+            if (greeting == null)
             {
-                Success = true,
-                Message = "Greeting Message Retrieved",
-                Data = greetingMessage
-            };
-            return Ok(responseModel);
+                return NotFound(new { message = "Greeting not found!" });
+            }
+            return Ok(greeting);
         }
     }
 }
