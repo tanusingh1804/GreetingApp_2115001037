@@ -1,7 +1,8 @@
-﻿using RepositoryLayer.Context;
+﻿using System.Collections.Generic;
+using System.Linq;
+using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
-using System.Linq;
 
 namespace RepositoryLayer.Service
 {
@@ -17,6 +18,11 @@ namespace RepositoryLayer.Service
         public GreetingEntity GetGreetingById(int id)
         {
             return _context.Greetings.FirstOrDefault(g => g.Id == id);
+        }
+
+        public List<GreetingEntity> GetAllGreetings() 
+        {
+            return _context.Greetings.ToList();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BusinessLayer.Interface;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
@@ -24,6 +25,13 @@ namespace GreetingApp.Controllers
                 return NotFound(new { message = "Greeting not found!" });
             }
             return Ok(greeting);
+        }
+
+        [HttpGet("all")] 
+        public IActionResult GetAllGreetings()
+        {
+            var greetings = _greetingBL.GetAllGreetings();
+            return Ok(greetings);
         }
     }
 }

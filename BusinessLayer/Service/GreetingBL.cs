@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Interface;
+﻿using System.Collections.Generic;
+using BusinessLayer.Interface;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 
@@ -16,6 +17,11 @@ namespace BusinessLayer.Service
         public GreetingEntity GetGreetingById(int id)
         {
             return _greetingRL.GetGreetingById(id);
+        }
+
+        public List<GreetingEntity> GetAllGreetings() 
+        {
+            return _greetingRL.GetAllGreetings();
         }
     }
 }
