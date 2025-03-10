@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using BusinessLayer.Interface;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Entity;
@@ -27,11 +26,20 @@ namespace GreetingApp.Controllers
             return Ok(greeting);
         }
 
-        [HttpGet("all")] 
-        public IActionResult GetAllGreetings()
+        
+        [HttpPut("{id}")]
+        public IActionResult UpdateGreeting(int id, [FromBody] GreetingEntity greeting)
         {
-            var greetings = _greetingBL.GetAllGreetings();
-            return Ok(greetings);
+            var existingGreeting = _greetingBL.GetGreetingById(id);
+            if (existingGreeting == null)
+            {
+                return NotFound(new { message = "Greeting not found!" });
+            }
+
+            existingGreeting.Message = greeting.Message; 
+            _greetingBL.UpdateGreeting(existingGreeting);
+
+            return Ok(new { message = "Greeting updated successfully!", data = existingGreeting });
         }
     }
 }

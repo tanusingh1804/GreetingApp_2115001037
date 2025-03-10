@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using RepositoryLayer.Context;
+﻿using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
+using System.Linq;
 
 namespace RepositoryLayer.Service
 {
@@ -20,9 +19,15 @@ namespace RepositoryLayer.Service
             return _context.Greetings.FirstOrDefault(g => g.Id == id);
         }
 
-        public List<GreetingEntity> GetAllGreetings() 
+        
+        public void UpdateGreeting(GreetingEntity greeting)
         {
-            return _context.Greetings.ToList();
+            var existingGreeting = _context.Greetings.FirstOrDefault(g => g.Id == greeting.Id);
+            if (existingGreeting != null)
+            {
+                existingGreeting.Message = greeting.Message; 
+                _context.SaveChanges(); 
+            }
         }
     }
 }
