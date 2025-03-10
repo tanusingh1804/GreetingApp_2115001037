@@ -5,6 +5,6 @@ namespace RepositoryLayer.Interface
     public interface IGreetingRL
     {
         GreetingEntity GetGreetingById(int id);
-        void UpdateGreeting(GreetingEntity greeting); 
+        bool DeleteGreeting(int id); 
     }
 }

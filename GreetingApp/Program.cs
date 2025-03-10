@@ -1,3 +1,5 @@
+using NLog;
+using NLog.Web;
 using BusinessLayer.Interface;
 using BusinessLayer.Service;
 using Microsoft.EntityFrameworkCore;
@@ -5,24 +7,41 @@ using RepositoryLayer.Context;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Service;
 
-var builder = WebApplication.CreateBuilder(args);
+var logger = LogManager.Setup().LoadConfigurationFromFile("nlog.config").GetCurrentClassLogger();
+try
+{
+    logger.Info("Application is starting...");
 
-// Database Context Add
-builder.Services.AddDbContext<GreetingDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    var builder = WebApplication.CreateBuilder(args);
 
-// Dependency Injection
-builder.Services.AddScoped<IGreetingRL, GreetingRL>();
-builder.Services.AddScoped<IGreetingBL, GreetingBL>();
+    builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    // Database Context
+    builder.Services.AddDbContext<GreetingDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-var app = builder.Build();
+    builder.Services.AddScoped<IGreetingRL, GreetingRL>();
+    builder.Services.AddScoped<IGreetingBL, GreetingBL>();
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
-app.Run();
+    var app = builder.Build();
+
+    app.UseHttpsRedirection();
+    app.UseAuthorization();
+    app.MapControllers();
+
+    app.Run();
+}
+catch (Exception ex)
+{
+    logger.Error(ex, "Application stopped due to an exception.");
+    throw;
+}
+finally
+{
+    LogManager.Shutdown();
+}
